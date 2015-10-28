@@ -40,7 +40,7 @@ where:
 #### Retrieving state machine context
 
 ```sh
-seneca.act( "role: 'sm-name', get: 'context'", some_data, function( err, context ) {
+seneca.act( "role: 'sm-name', get: 'context'", function( err, context ) {
 })
 ```
 
@@ -104,6 +104,7 @@ The configuration to be used for this state machine is:
       commands: [
         {
           cmd:   "execute",
+          pattern: "role: 'transport', execute: 'connect'",
           next:  {
             success: "NOT_CONFIGURED"
           }
