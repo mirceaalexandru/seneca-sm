@@ -77,10 +77,10 @@ Configuration structure for state machine is:
      * _next_ define transitions based on seneca action result
        * _err_ define next status in case of error - this is a String
         * _success_ value can be:
-         * String in this case defines next status in case that Seneca action defined by pattern returns success data
-         * Array of objects with following structure
-           * _schema_ Parambulator schema to be applied on callback data
-           * _state_ next state in case Parambulator schema matches data
+          * String in this case defines next status in case that Seneca action defined by pattern returns success data
+          * Array of objects with following structure
+            * _schema_ Parambulator schema to be applied on callback data
+            * _state_ next state in case Parambulator schema matches data
 
 
 ### Example
