@@ -105,11 +105,17 @@ The configuration to be used for this state machine is:
       commands: [
         {
           cmd:   "execute",
-          state: "INIT",
-          pattern: "role: 'transport', execute: 'connect'",
           next:  {
             error:   "INIT",
             success: "NOT_CONFIGURED"
+          }
+        },
+        {
+          cmd:   "disconnect",
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            error:   "INIT",
+            success: "INIT"
           }
         }
       ]
@@ -122,6 +128,14 @@ The configuration to be used for this state machine is:
           next:  {
             error:   "DISCONNECTED",
             success: "CONNECTED"
+          }
+        },
+        {
+          cmd:   "disconnect",
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            error:   "INIT",
+            success: "DISCONNECTED"
           }
         }
       ]
@@ -137,6 +151,14 @@ The configuration to be used for this state machine is:
             success: "CONNECTED"
           }
         },
+        {
+          cmd:   "disconnect",
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            error:   "INIT",
+            success: "DISCONNECTED"
+          }
+        }
       ]
     },
     "DISCONNECTED": {
@@ -148,6 +170,14 @@ The configuration to be used for this state machine is:
           next:  {
             error:   "INIT",
             success: "INIT"
+          }
+        },
+        {
+          cmd:   "disconnect",
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            error:   "INIT",
+            success: "DISCONNECTED"
           }
         }
       ]
