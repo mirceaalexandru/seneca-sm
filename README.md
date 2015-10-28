@@ -1,11 +1,11 @@
-A simple state-machine plugin implementation for Seneca
-========================================================
+A state-machine plugin implementation for Seneca
+=================================================
 
 ## Seneca State-Machine Plugin
 
-This plugin stores a state-machine context. The state machine have two main concepts: States and Commands. At each moment
-the state machine can be in one single state. In each state there can be defined one or more commands, result of these commands
-changing the state of the state machine.
+This plugin stores and execute a state-machine context. The state machine have two main concepts: _States_ and _Commands_.
+At each moment the state machine can be in one single state.
+In each state there can be defined one or more commands, result of these commands changing the state of the state machine.
 
 ## Seneca State-Machine Plugin
 
@@ -181,3 +181,8 @@ The configuration to be used for this state machine is:
 }
 ```
 
+### Test
+
+```sh
+npm test
+```
