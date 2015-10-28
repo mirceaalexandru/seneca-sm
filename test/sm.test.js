@@ -30,7 +30,7 @@ suite( 'init stage suite tests ', function () {
           } )
         },
 
-        // GO TO CONNECTED
+        // GO TO NOT_CONFIGURED
         go_to_connected: function( callback ) {
           seneca.act( "role: '" + util.config.name + "', cmd: 'execute'", {shouldFail: false}, function( err, data ) {
             assert( !err )
@@ -43,12 +43,12 @@ suite( 'init stage suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, util.states.NOT_CONFIGURED )
+            assert.equal( context.state, "NOT_CONFIGURED" )
             callback( err )
           } )
         },
 
-        // GO TO CONFIGURED
+        // GO TO CONNECTED
         go_to_configured: function( callback ) {
           seneca.act( "role: '" + util.config.name + "', cmd: 'execute'", {shouldFail: false}, function( err, data ) {
             assert( !err )
@@ -62,7 +62,7 @@ suite( 'init stage suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, util.states.CONNECTED )
+            assert.equal( context.state, "CONNECTED" )
             callback( err )
           } )
         },
@@ -80,7 +80,7 @@ suite( 'init stage suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, util.states.CONNECTED )
+            assert.equal( context.state, "CONNECTED" )
             callback( err )
           } )
         }

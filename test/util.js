@@ -9,51 +9,77 @@ exports.states = {
 
 exports.config = {
   validate: true,
-  name:     'sm1',
-  states:   [
-    exports.states.INIT,
-    exports.states.NOT_CONFIGURED,
-    exports.states.CONNECTED,
-    exports.states.DISCONNECTED
-  ],
-  commands: [
-    {
-      cmd:   'execute',
-      state: exports.states.INIT,
-      pattern: "role: 'transport', execute: 'connect'",
-      next:  {
-        error:   exports.states.INIT,
-        success: exports.states.NOT_CONFIGURED
+  name    : 'sm1',
+
+  states: {
+    INIT : {
+      initState: true,
+      defaults: {
+        next: {
+          error: 'INIT'
+        }
+      },
+      commands: {
+        execute: {
+          pattern: "role: 'transport', execute: 'connect'",
+          next:  {
+            success: "NOT_CONFIGURED"
+          }
+        },
+        disconnect: {
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            success: "INIT"
+          }
+        }
       }
     },
-    {
-      cmd:   'execute',
-      state: exports.states.NOT_CONFIGURED,
-      pattern: "role: 'transport', send: 'config'",
-      next:  {
-        error:   exports.states.DISCONNECTED,
-        success: exports.states.CONNECTED
+    NOT_CONFIGURED: {
+      commands: {
+        execute: {
+          pattern: "role: 'transport', send: 'config'",
+          next:  {
+            error:   "DISCONNECTED",
+            success: "CONNECTED"
+          }
+        },
+        disconnect: {
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            success: "DISCONNECTED"
+          }
+        }
       }
     },
-    {
-      cmd:   'execute',
-      state: exports.states.CONNECTED,
-      pattern: "role: 'transport', send: 'some_command'",
-      next:  {
-        error:   exports.states.DISCONNECTED,
-        success: exports.states.CONNECTED
+    CONNECTED: {
+      commands: {
+        execute: {
+          pattern: "role: 'transport', send: 'some_command'",
+          next:  {
+            error:   "DISCONNECTED",
+            success: "CONNECTED"
+          }
+        },
+        disconnect: {
+          pattern: "role: 'transport', execute: 'disconnect'",
+          next:  {
+            success: "DISCONNECTED"
+          }
+        }
       }
     },
-    {
-      cmd:   'execute',
-      state: exports.states.DISCONNECTED,
-      pattern: "role: 'transport', execute: 'cleanup'",
-      next:  {
-        error:   exports.states.INIT,
-        success: exports.states.INIT
+    DISCONNECTED: {
+      commands: {
+        execute: {
+          pattern: "role: 'transport', execute: 'cleanup'",
+          next:  {
+            error:   "INIT",
+            success: "INIT"
+          }
+        }
       }
     }
-  ]
+  }
 }
 
 exports.init = function( options, cb ) {

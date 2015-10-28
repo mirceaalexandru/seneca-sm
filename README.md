@@ -71,8 +71,9 @@ Configuration structure for state machine is:
  * _name_ name of the state machine - it will be used as role configuration when state machine actions will be called
  * _states_ object defining the states and commands. Key is the state and value an object with
    * _defaults_ default behavior for this state - TBD
+   * _initState_ default state for state machine. One single state should have this parameter true
    * _commands_ array with all commands for current state
-     * _cmd_ command to be executed for this state
+     * _key_ command to be executed for this state
      * _pattern_ seneca pattern defining the action to be called to execute the state
      * _next_ define transitions based on seneca action result
        * _err_ define next status in case of error - this is a String
@@ -98,85 +99,81 @@ The configuration to be used for this state machine is:
   name:     'sm1',
   states: {
     "INIT": {
+      initState: true,
       defaults: {
-        error:   "INIT"
+        next: {
+          error:   "INIT"
+        }
       },
-      commands: [
-        {
-          cmd:   "execute",
+      commands: {
+        execute: {
           pattern: "role: 'transport', execute: 'connect'",
           next:  {
             success: "NOT_CONFIGURED"
           }
         },
-        {
-          cmd:   "disconnect",
+        disconnect: {
           pattern: "role: 'transport', execute: 'disconnect'",
           next:  {
             success: "INIT"
           }
         }
-      ]
+      }
     },
     "NOT_CONFIGURED": {
-      commands: [
-        {
-          cmd:   'execute',
+      commands: {
+        execute: {
           pattern: "role: 'transport', send: 'config'",
           next:  {
             error:   "DISCONNECTED",
             success: "CONNECTED"
           }
         },
-        {
-          cmd:   "disconnect",
+        disconnect: {
           pattern: "role: 'transport', execute: 'disconnect'",
           next:  {
             error:   "INIT",
             success: "DISCONNECTED"
           }
         }
-      ]
+      }
     },
     "CONNECTED": {
-      commands: [
-        {
-          cmd:   'execute',
+      commands: {
+        execute: {
           pattern: "role: 'transport', send: 'some_command'",
           next:  {
             error:   "DISCONNECTED",
             success: "CONNECTED"
           }
         },
-        {
-          cmd:   "disconnect",
+        disconnect: {
           pattern: "role: 'transport', execute: 'disconnect'",
           next:  {
             error:   "INIT",
             success: "DISCONNECTED"
           }
         }
-      ]
+      }
     },
     "DISCONNECTED": {
-      commands: [
-        {
-          cmd:   'execute',
+      commands: {
+        execute: {
+          cmd:   '',
           pattern: "role: 'transport', execute: 'cleanup'",
           next:  {
             error:   "INIT",
             success: "INIT"
           }
         },
-        {
-          cmd:   "disconnect",
+        disconnect: {
           pattern: "role: 'transport', execute: 'disconnect'",
           next:  {
             error:   "INIT",
             success: "DISCONNECTED"
           }
         }
-      ]
+      }
     }
   }
 }
