@@ -17,10 +17,25 @@ npm install seneca-sm
 
 ### Usage
 
+#### Initialisation
+
 ```sh
 seneca.act( "role: 'sm', create: 'instance'", {config: sm_configuration}, function( err, context ) {
 })
 ```
+
+#### Executing commands
+
+```sh
+seneca.act( "role: 'sm-name', cmd: 'command-name'", some_data, function( err, data ) {
+})
+```
+
+where:
+ * _sm-name_ is the name of the state-machine as it was set in the configuration
+ * _command-name_ the command to be executed for current state. Should be defined in the configuration.
+ * _some_data_ optional JSON containing additional-data for command
+
 
 ### Configuration
 
