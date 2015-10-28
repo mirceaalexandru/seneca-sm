@@ -46,7 +46,7 @@ Configuration structure for state machine is:
 
 The following simple state machine will be used as example.
 
-![Diagram](https://github.com/mirceaalexandru/seneca-sm/doc/diagram.png)
+![Diagram](https://github.com/mirceaalexandru/seneca-sm/blob/master/doc/diagram.png)
 
 The configuration to be used for this state machine is:
 
