@@ -99,14 +99,12 @@ The configuration to be used for this state machine is:
   states: {
     "INIT": {
       defaults: {
-        error:   "INIT",
-        success: "NOT_CONFIGURED"
+        error:   "INIT"
       },
       commands: [
         {
           cmd:   "execute",
           next:  {
-            error:   "INIT",
             success: "NOT_CONFIGURED"
           }
         },
@@ -114,7 +112,6 @@ The configuration to be used for this state machine is:
           cmd:   "disconnect",
           pattern: "role: 'transport', execute: 'disconnect'",
           next:  {
-            error:   "INIT",
             success: "INIT"
           }
         }
