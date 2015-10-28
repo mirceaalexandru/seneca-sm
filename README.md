@@ -37,6 +37,32 @@ where:
  * _some_data_ optional JSON containing additional-data for command
 
 
+#### Retrieving state machine context
+
+```sh
+seneca.act( "role: 'sm-name', get: 'context'", some_data, function( err, context ) {
+})
+```
+
+#### Set data in state-machine context
+
+This command will set some data in the state machine context. This data will be sent to all commands executed on the state machine.
+
+```sh
+seneca.act( "role: 'sm-name', set: 'data'", some_data, function( err, context ) {
+})
+```
+
+#### Remove state-machine context
+
+This command will close the state machine. This state machine cannot be used anymore. A new state machine with same name can be started.
+
+```sh
+seneca.act( "role: 'sm-name', drop: 'instance'", function( err, context ) {
+})
+```
+
+
 ### Configuration
 
 Configuration structure for state machine is:
