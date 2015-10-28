@@ -144,7 +144,6 @@ The configuration to be used for this state machine is:
       commands: [
         {
           cmd:   'execute',
-          state: ,
           pattern: "role: 'transport', send: 'some_command'",
           next:  {
             error:   "DISCONNECTED",
@@ -165,7 +164,6 @@ The configuration to be used for this state machine is:
       commands: [
         {
           cmd:   'execute',
-          state: ,
           pattern: "role: 'transport', execute: 'cleanup'",
           next:  {
             error:   "INIT",
