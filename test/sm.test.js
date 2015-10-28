@@ -85,7 +85,7 @@ suite( 'init stage suite tests ', function () {
           } )
         }
 
-        // GO TO DISCONNECTED
+//        // GO TO DISCONNECTED
 //        go_to_disconnected: function( callback ) {
 //          seneca.act( "role: '" + util.config.name + "', cmd: 'execute'", {shouldFail: true}, function( err, data ) {
 //            assert( err )
