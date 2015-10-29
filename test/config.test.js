@@ -36,7 +36,6 @@ var config1 = {
 
 var config2 = {
   name    : 'sm2',
-
   states: {
     INIT : {
       defaults: {
@@ -121,6 +120,33 @@ suite( 'state-machine duplicate suite tests', function () {
           seneca.act( "role: 'sm', create: 'instance'", {config: config1}, function( err ) {
             assert( err )
             assert.equal( err.orig.code, 'SM already exists' )
+            callback(  )
+          } )
+        }
+      },
+      function( err, results ) {
+        done()
+      } )
+  } )
+} )
+
+
+suite( 'state-machine no initialState tests', function () {
+  var seneca
+
+  before( {}, function ( done ) {
+    util.init( {}, function ( err, si ) {
+      seneca = si
+      done()
+    } )
+  } )
+
+  test( 'start duplicate sm', function ( done ) {
+    async.series( {
+        create_instance: function( callback ) {
+          seneca.act( "role: 'sm', create: 'instance'", {config: config2}, function( err ) {
+            assert( err )
+            assert.equal( err.orig.code, 'One single state should have initState: true' )
             callback(  )
           } )
         }
