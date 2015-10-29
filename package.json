@@ -2,23 +2,37 @@
   "name": "seneca-sm",
   "version": "0.0.1",
   "description": "A state machine implementation plugin for Seneca",
-  "main": "app.js",
+  "main": "lib/sm.js",
   "scripts": {
     "start": "lib/sm.js",
     "test": "lab"
   },
-  "repository": "https://github.com/mirceaalexandru/seneca-sm",
+  "keywords": [
+    "seneca",
+    "state",
+    "machine",
+    "plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mirceaalexandru/seneca-sm"
+  },
   "author": {
     "name": "Mircea Alexandru",
     "email": "mircea.alexandru@gmail.com"
   },
   "license": "MIT",
   "dependencies": {
+    "lodash": "^3.10.1"
   },
+  "files": [
+    "LICENSE.txt",
+    "README.md",
+    "lib/sm.js"
+  ],
   "devDependencies": {
     "lab": "^7.0.0",
     "async": "^1.5.0",
-    "lodash": "^3.10.1",
     "seneca": "~0.7.0"
   }
 }
