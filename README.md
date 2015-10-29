@@ -1,5 +1,9 @@
-A state-machine plugin implementation for Seneca
-=================================================
+State-machine plugin for Seneca
+================================
+
+![Seneca](http://senecajs.surge.sh/files/assets/seneca-banner.png)
+> A [Seneca.js][] state-machine plugin
+
 
 ## Seneca State-Machine Plugin
 
