@@ -1,8 +1,8 @@
 State-machine plugin for Seneca
 ================================
 
-![Seneca](http://senecajs.surge.sh/files/assets/seneca-banner.png)
-> A [Seneca.js][] state-machine plugin
+![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
+> A [Seneca.js][] testing toolkit
 
 
 ## Seneca State-Machine Plugin
