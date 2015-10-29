@@ -2,7 +2,6 @@ State-machine plugin for Seneca
 ================================
 
 ![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
-A [Seneca.js] testing toolkit
 
 
 ## Seneca State-Machine Plugin
