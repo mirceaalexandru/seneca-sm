@@ -11,9 +11,9 @@ var before = lab.before;
 
 var util = require( './util.js' )
 
-var seneca
+suite( 'state-machine suite tests ', function () {
+  var seneca
 
-suite( 'init stage suite tests ', function () {
   before( {}, function ( done ) {
     util.init( {}, function ( err, si ) {
       seneca = si
@@ -21,7 +21,7 @@ suite( 'init stage suite tests ', function () {
     } )
   } )
 
-  test( 'simple state-machine flow', function ( done ) {
+  test( 'simple flow', function ( done ) {
     async.series( {
         create_instance: function( callback ) {
           seneca.act( "role: 'sm', create: 'instance'", {config: util.config}, function( err, context ) {
@@ -84,24 +84,6 @@ suite( 'init stage suite tests ', function () {
             callback( err )
           } )
         }
-
-//        // GO TO DISCONNECTED
-//        go_to_disconnected: function( callback ) {
-//          seneca.act( "role: '" + util.config.name + "', cmd: 'execute'", {shouldFail: true}, function( err, data ) {
-//            assert( err )
-//            assert( !data )
-//            callback( err )
-//          } )
-//        },
-//        verify_disconnected: function( callback ) {
-//          seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
-//            assert( !err )
-//            assert( context )
-//            assert.equal( context.state, util.DISCONNECTED )
-//            callback( err )
-//          } )
-//        }
-
       },
       function( err, results ) {
         done()

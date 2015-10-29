@@ -86,33 +86,27 @@ exports.init = function( options, cb ) {
   var si = require( 'seneca' )( /*{log: 'print'}*/ )
   si.use( require( '../lib/sm.js' ) )
 
-  si.ready( function( err ) {
-    if( err ) {
-      return process.exit( !console.error( err ) );
+  si.add({role: 'transport', execute: 'connect'}, function(args, done){
+    if (args.shouldFail){
+      return done('Some error')
     }
+    done(null, {data: 'OK', connect: true})
+  })
 
-    si.add({role: 'transport', execute: 'connect'}, function(args, done){
-      if (args.shouldFail){
-        return done('Some error')
-      }
-      done(null, {data: 'OK', connect: true})
-    })
+  si.add({role: 'transport', send: 'config'}, function(args, done){
+    if (args.shouldFail){
+      return done('Some error')
+    }
+    done(null, {data: 'OK', configure: true})
+  })
 
-    si.add({role: 'transport', send: 'config'}, function(args, done){
-      if (args.shouldFail){
-        return done('Some error')
-      }
-      done(null, {data: 'OK', configure: true})
-    })
+  si.add({role: 'transport', send: 'some_command'}, function(args, done){
+    if (args.shouldFail){
+      return done('Some error')
+    }
+    done(null, {data: 'OK', command: true})
+  })
 
-    si.add({role: 'transport', send: 'some_command'}, function(args, done){
-      if (args.shouldFail){
-        return done('Some error')
-      }
-      done(null, {data: 'OK', command: true})
-    })
-
-    cb( null, si )
-  } )
+  cb( null, si )
 }
 
