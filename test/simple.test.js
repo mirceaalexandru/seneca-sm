@@ -24,7 +24,7 @@ suite( 'state-machine suite tests ', function () {
   test( 'simple flow', function ( done ) {
     async.series( {
         create_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", {config: util.config}, function( err, context ) {
+          seneca.act( "role: 'sm', create: 'instance'", util.config, function( err, context ) {
             assert( !err )
             callback( err )
           } )
@@ -43,7 +43,7 @@ suite( 'state-machine suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, "NOT_CONFIGURED" )
+            assert.equal( context.current_status, "NOT_CONFIGURED" )
             callback( err )
           } )
         },
@@ -53,6 +53,7 @@ suite( 'state-machine suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', cmd: 'execute'", {shouldFail: false}, function( err, data ) {
             assert( !err )
             assert( data )
+            console.log('######################', data)
             assert( !data.connect )
             assert( data.configure )
             callback( err )
@@ -62,7 +63,7 @@ suite( 'state-machine suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, "CONNECTED" )
+            assert.equal( context.current_status, "CONNECTED" )
             callback( err )
           } )
         },
@@ -80,7 +81,7 @@ suite( 'state-machine suite tests ', function () {
           seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
             assert( !err )
             assert( context )
-            assert.equal( context.state, "CONNECTED" )
+            assert.equal( context.current_status, "CONNECTED" )
             callback( err )
           } )
         }
