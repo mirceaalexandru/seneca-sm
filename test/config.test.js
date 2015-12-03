@@ -128,6 +128,26 @@ suite( 'state-machine duplicate suite tests', function () {
         done()
       } )
   } )
+
+  test( 'start duplicate sm', function ( done ) {
+    async.series( {
+        remove_instance: function( callback ) {
+          seneca.act( "role: 'sm', close: 'instance'", {name: config1.name}, function( err ) {
+            assert( !err )
+            callback( err )
+          } )
+        },
+        create_duplicate_instance: function( callback ) {
+          seneca.act( "role: 'sm', create: 'instance'", config1, function( err ) {
+            assert( !err )
+            callback( err )
+          } )
+        }
+      },
+      function( err, results ) {
+        done()
+      } )
+  } )
 } )
 
 
