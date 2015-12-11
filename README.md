@@ -3,6 +3,11 @@ State-machine plugin for Seneca
 
 ![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
 
+# seneca-sm
+[![npm version][npm-badge]][npm-url] 
+[![Build Status][travis-badge]][travis-url]
+[![Coverage Status][coverage-badge]][coverage-url]
+
 
 ## Seneca State-Machine Plugin
 
@@ -91,7 +96,7 @@ Configuration structure for state machine is:
 
 The following simple state machine will be used as example.
 
-![Diagram](https://github.com/mirceaalexandru/seneca-sm/blob/master/doc/diagram.png)
+![Diagram](http://www.alexandrumircea.ro/share/seneca-sm/diagram.png)
 
 The configuration to be used for this state machine is:
 
@@ -187,3 +192,11 @@ The configuration to be used for this state machine is:
 ```sh
 npm test
 ```
+
+[travis-badge]: https://api.travis-ci.org/mirceaalexandru/seneca-sm.svg
+[travis-url]: https://travis-ci.org/mirceaalexandru/seneca-sm
+[npm-badge]: https://badge.fury.io/js/seneca-sm.svg
+[npm-url]: https://badge.fury.io/js/seneca-sm
+[coverage-badge]: https://coveralls.io/repos/mirceaalexandru/seneca-sm/badge.svg?branch=master&service=github
+[coverage-url]: https://coveralls.io/github/mirceaalexandru/seneca-sm?branch=master
+
