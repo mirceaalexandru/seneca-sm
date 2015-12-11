@@ -5,7 +5,9 @@
   "main": "lib/sm.js",
   "scripts": {
     "start": "lib/sm.js",
-    "test": "lab"
+    "test": "lab -v -P test -t 80",
+    "cover": "lab -s -P test -r lcov | coveralls",
+    "lint": "lab -P test -dL"
   },
   "keywords": [
     "seneca",
@@ -35,6 +37,7 @@
   "devDependencies": {
     "lab": "^7.0.0",
     "async": "^1.5.0",
+    "coveralls": "^2.11.4",
     "seneca": "~0.7.0"
   }
 }
