@@ -1,21 +1,21 @@
-"use strict";
+'use strict'
 
-var assert = require( 'assert' )
-var async = require('async')
+var Assert = require('assert')
+var Async = require('async')
 
-var Lab = require( 'lab' )
+var Lab = require('lab')
 var lab = exports.lab = Lab.script()
-var suite = lab.suite;
-var test = lab.test;
-var before = lab.before;
+var suite = lab.suite
+var test = lab.test
+var before = lab.before
 
-var util = require( './util.js' )
+var Util = require('./util.js')
 
 var config1 = {
-  name    : 'sm1',
+  name: 'sm1',
 
   states: {
-    INIT : {
+    INIT: {
       initState: true,
       defaults: {
         pattern: "role: 'transport', execute: 'connect'",
@@ -25,8 +25,8 @@ var config1 = {
       },
       commands: {
         execute: {
-          next:  {
-            success: "INIT"
+          next: {
+            success: 'INIT'
           }
         }
       }
@@ -35,9 +35,9 @@ var config1 = {
 }
 
 var config2 = {
-  name    : 'sm2',
+  name: 'sm2',
   states: {
-    INIT : {
+    INIT: {
       defaults: {
         pattern: "role: 'transport', execute: 'connect'",
         next: {
@@ -46,8 +46,8 @@ var config2 = {
       },
       commands: {
         execute: {
-          next:  {
-            success: "INIT"
+          next: {
+            success: 'INIT'
           }
         }
       }
@@ -55,128 +55,133 @@ var config2 = {
   }
 }
 
-
-suite( 'state-machine suite tests', function () {
+suite('state-machine suite tests', function () {
   var seneca
 
-  before( {}, function ( done ) {
-    util.init( {}, function ( err, si ) {
+  before({}, function (done) {
+    Util.init({}, function (err, si) {
+      Assert(!err)
+
       seneca = si
       done()
-    } )
-  } )
+    })
+  })
 
-  test( 'config defaults', function ( done ) {
-    async.series( {
-        create_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", config1, function( err ) {
-            assert( !err )
-            callback( err )
-          } )
-        },
-
-        verify_defaults: function( callback ) {
-          seneca.act( "role: '" + util.config.name + "', get: 'context'", function( err, context ) {
-            assert( !err )
-            assert( context.rules.config.states.INIT )
-            assert( context.rules.config.states.INIT.commands )
-            assert( context.rules.config.states.INIT.commands.execute )
-            assert.equal( context.rules.config.states.INIT.commands.execute.pattern, config1.states.INIT.defaults.pattern )
-            assert( context.rules.config.states.INIT.commands.execute.next )
-            assert( context.rules.config.states.INIT.commands.execute.next.success )
-            assert( context.rules.config.states.INIT.commands.execute.next.error )
-            assert.equal( context.rules.config.states.INIT.commands.execute.next.error, config1.states.INIT.defaults.next.error )
-
-            callback( err )
-          } )
-        }
-
+  test('config defaults', function (done) {
+    Async.series({
+      create_instance: function (callback) {
+        seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
+          Assert(!err)
+          callback(err)
+        })
       },
-      function( err, results ) {
-        done()
-      } )
-  } )
+
+      verify_defaults: function (callback) {
+        seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
+          Assert(!err)
+          Assert(context.rules.config.states.INIT)
+          Assert(context.rules.config.states.INIT.commands)
+          Assert(context.rules.config.states.INIT.commands.execute)
+          Assert.equal(context.rules.config.states.INIT.commands.execute.pattern, config1.states.INIT.defaults.pattern)
+          Assert(context.rules.config.states.INIT.commands.execute.next)
+          Assert(context.rules.config.states.INIT.commands.execute.next.success)
+          Assert(context.rules.config.states.INIT.commands.execute.next.error)
+          Assert.equal(context.rules.config.states.INIT.commands.execute.next.error, config1.states.INIT.defaults.next.error)
+
+          callback(err)
+        })
+      }
+    },
+    function (err, results) {
+      Assert(!err)
+      done()
+    })
+  })
 })
 
-suite( 'state-machine duplicate suite tests', function () {
+suite('state-machine duplicate suite tests', function () {
   var seneca
 
-  before( {}, function ( done ) {
-    util.init( {}, function ( err, si ) {
+  before({}, function (done) {
+    Util.init({}, function (err, si) {
+      Assert(!err)
+
       seneca = si
       done()
-    } )
-  } )
+    })
+  })
 
-  test( 'start duplicate sm', function ( done ) {
-    async.series( {
-        create_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", config1, function( err ) {
-            assert( !err )
-            callback( err )
-          } )
-        },
-        create_duplicate_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", config1, function( err ) {
-            assert( err )
-            assert.equal( err.orig.code, 'SM already exists' )
-            callback(  )
-          } )
-        }
+  test('start duplicate sm', function (done) {
+    Async.series({
+      create_instance: function (callback) {
+        seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
+          Assert(!err)
+          callback(err)
+        })
       },
-      function( err, results ) {
-        done()
-      } )
-  } )
+      create_duplicate_instance: function (callback) {
+        seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
+          Assert(err)
+          Assert.equal(err.orig.code, 'SM already exists')
+          callback()
+        })
+      }
+    },
+    function (err, results) {
+      Assert(!err)
 
-  test( 'start duplicate sm', function ( done ) {
-    async.series( {
-        remove_instance: function( callback ) {
-          seneca.act( "role: 'sm', close: 'instance'", {name: config1.name}, function( err ) {
-            assert( !err )
-            callback( err )
-          } )
-        },
-        create_duplicate_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", config1, function( err ) {
-            assert( !err )
-            callback( err )
-          } )
-        }
+      done()
+    })
+  })
+
+  test('start duplicate sm', function (done) {
+    Async.series({
+      remove_instance: function (callback) {
+        seneca.act("role: 'sm', close: 'instance'", {name: config1.name}, function (err) {
+          Assert(!err)
+          callback(err)
+        })
       },
-      function( err, results ) {
-        done()
-      } )
-  } )
-} )
+      create_duplicate_instance: function (callback) {
+        seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
+          Assert(!err)
+          callback(err)
+        })
+      }
+    },
+    function (err, results) {
+      Assert(!err)
 
+      done()
+    })
+  })
+})
 
-suite( 'state-machine no initialState tests', function () {
+suite('state-machine no initialState tests', function () {
   var seneca
 
-  before( {}, function ( done ) {
-    util.init( {}, function ( err, si ) {
+  before({}, function (done) {
+    Util.init({}, function (err, si) {
+      Assert(!err)
+
       seneca = si
       done()
-    } )
-  } )
+    })
+  })
 
-  test( 'start duplicate sm', function ( done ) {
-    async.series( {
-        create_instance: function( callback ) {
-          seneca.act( "role: 'sm', create: 'instance'", config2, function( err ) {
-            assert( err )
-            assert.equal( err.orig.code, 'One single state should have initState: true' )
-            callback(  )
-          } )
-        }
-      },
-      function( err, results ) {
-        done()
-      } )
-  } )
-} )
-
-
-
-
+  test('start duplicate sm', function (done) {
+    Async.series({
+      create_instance: function (callback) {
+        seneca.act("role: 'sm', create: 'instance'", config2, function (err) {
+          Assert(err)
+          Assert.equal(err.orig.code, 'One single state should have initState: true')
+          callback()
+        })
+      }
+    },
+    function (err, results) {
+      Assert(!err)
+      done()
+    })
+  })
+})
