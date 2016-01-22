@@ -1,6 +1,5 @@
 'use strict'
 
-var Assert = require('assert')
 var Async = require('async')
 
 var Lab = require('lab')
@@ -8,6 +7,8 @@ var lab = exports.lab = Lab.script()
 var suite = lab.suite
 var test = lab.test
 var before = lab.before
+var Code = require('code')
+var expect = Code.expect
 
 var Util = require('./util.js')
 
@@ -60,7 +61,7 @@ suite('state-machine suite tests', function () {
 
   before({}, function (done) {
     Util.init({}, function (err, si) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       seneca = si
       done()
@@ -71,29 +72,29 @@ suite('state-machine suite tests', function () {
     Async.series({
       create_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
-          Assert(!err)
+          expect(err).to.not.exist()
           callback(err)
         })
       },
 
       verify_defaults: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
-          Assert(!err)
-          Assert(context.rules.config.states.INIT)
-          Assert(context.rules.config.states.INIT.commands)
-          Assert(context.rules.config.states.INIT.commands.execute)
-          Assert.equal(context.rules.config.states.INIT.commands.execute.pattern, config1.states.INIT.defaults.pattern)
-          Assert(context.rules.config.states.INIT.commands.execute.next)
-          Assert(context.rules.config.states.INIT.commands.execute.next.success)
-          Assert(context.rules.config.states.INIT.commands.execute.next.error)
-          Assert.equal(context.rules.config.states.INIT.commands.execute.next.error, config1.states.INIT.defaults.next.error)
+          expect(err).to.not.exist()
+          expect(context.rules.config.states.INIT).to.exist()
+          expect(context.rules.config.states.INIT.commands).to.exist()
+          expect(context.rules.config.states.INIT.commands.execute).to.exist()
+          expect(context.rules.config.states.INIT.commands.execute.pattern).to.equal(config1.states.INIT.defaults.pattern)
+          expect(context.rules.config.states.INIT.commands.execute.next).to.exist()
+          expect(context.rules.config.states.INIT.commands.execute.next.success).to.exist()
+          expect(context.rules.config.states.INIT.commands.execute.next.error).to.exist()
+          expect(context.rules.config.states.INIT.commands.execute.next.error).to.equal(config1.states.INIT.defaults.next.error)
 
           callback(err)
         })
       }
     },
     function (err, results) {
-      Assert(!err)
+      expect(err).to.not.exist()
       done()
     })
   })
@@ -104,7 +105,7 @@ suite('state-machine duplicate suite tests', function () {
 
   before({}, function (done) {
     Util.init({}, function (err, si) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       seneca = si
       done()
@@ -115,20 +116,20 @@ suite('state-machine duplicate suite tests', function () {
     Async.series({
       create_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
-          Assert(!err)
+          expect(err).to.not.exist()
           callback(err)
         })
       },
       create_duplicate_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
-          Assert(err)
-          Assert.equal(err.orig.code, 'SM already exists')
+          expect(err).to.exist()
+          expect(err.orig.code).to.equal('SM already exists')
           callback()
         })
       }
     },
     function (err, results) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       done()
     })
@@ -138,19 +139,19 @@ suite('state-machine duplicate suite tests', function () {
     Async.series({
       remove_instance: function (callback) {
         seneca.act("role: 'sm', close: 'instance'", {name: config1.name}, function (err) {
-          Assert(!err)
+          expect(err).to.not.exist()
           callback(err)
         })
       },
       create_duplicate_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", config1, function (err) {
-          Assert(!err)
+          expect(err).to.not.exist()
           callback(err)
         })
       }
     },
     function (err, results) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       done()
     })
@@ -162,7 +163,7 @@ suite('state-machine no initialState tests', function () {
 
   before({}, function (done) {
     Util.init({}, function (err, si) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       seneca = si
       done()
@@ -173,14 +174,14 @@ suite('state-machine no initialState tests', function () {
     Async.series({
       create_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", config2, function (err) {
-          Assert(err)
-          Assert.equal(err.orig.code, 'One single state should have initState: true')
+          expect(err).to.exist()
+          expect(err.orig.code).to.equal('One single state should have initState: true')
           callback()
         })
       }
     },
     function (err, results) {
-      Assert(!err)
+      expect(err).to.not.exist()
       done()
     })
   })
