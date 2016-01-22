@@ -1,6 +1,5 @@
 'use strict'
 
-var Assert = require('assert')
 var Async = require('async')
 
 var Lab = require('lab')
@@ -8,6 +7,8 @@ var lab = exports.lab = Lab.script()
 var suite = lab.suite
 var test = lab.test
 var before = lab.before
+var Code = require('code')
+var expect = Code.expect
 
 var Util = require('./util.js')
 
@@ -16,7 +17,7 @@ suite('state-machine suite tests ', function () {
 
   before({}, function (done) {
     Util.init({}, function (err, si) {
-      Assert(!err)
+      expect(err).to.not.exist()
 
       seneca = si
       done()
@@ -27,7 +28,7 @@ suite('state-machine suite tests ', function () {
     Async.series({
       create_instance: function (callback) {
         seneca.act("role: 'sm', create: 'instance'", Util.config, function (err, context) {
-          Assert(!err)
+          expect(err).to.not.exist()
           callback(err)
         })
       },
@@ -35,17 +36,17 @@ suite('state-machine suite tests ', function () {
       // GO TO NOT_CONFIGURED
       go_to_connected: function (callback) {
         seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
-          Assert(!err)
-          Assert(data)
-          Assert(data.connect)
+          expect(err).to.not.exist()
+          expect(data).to.exist()
+          expect(data.connect).to.exist()
           callback(err)
         })
       },
       verify_connected: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
-          Assert(!err)
-          Assert(context)
-          Assert.equal(context.current_status, 'NOT_CONFIGURED')
+          expect(err).to.not.exist()
+          expect(context).to.exist()
+          expect(context.current_status).to.equal('NOT_CONFIGURED')
           callback(err)
         })
       },
@@ -53,19 +54,19 @@ suite('state-machine suite tests ', function () {
       // GO TO CONNECTED
       go_to_configured: function (callback) {
         seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
-          Assert(!err)
-          Assert(data)
+          expect(err).to.not.exist()
+          expect(data).to.exist()
           console.log('######################', data)
-          Assert(!data.connect)
-          Assert(data.configure)
+          expect(data.connect).to.not.exist()
+          expect(data.configure).to.exist()
           callback(err)
         })
       },
       verify_configured: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
-          Assert(!err)
-          Assert(context)
-          Assert.equal(context.current_status, 'CONNECTED')
+          expect(err).to.not.exist()
+          expect(context)
+          expect(context.current_status).to.equal('CONNECTED')
           callback(err)
         })
       },
@@ -73,23 +74,23 @@ suite('state-machine suite tests ', function () {
       // STAY CONFIGURED
       stay_configured: function (callback) {
         seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
-          Assert(!err)
-          Assert(data)
-          Assert(!data.connect)
+          expect(err).to.not.exist()
+          expect(data).to.exist()
+          expect(data.connect).to.not.exist()
           callback(err)
         })
       },
       verify_configured_again: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
-          Assert(!err)
-          Assert(context)
-          Assert.equal(context.current_status, 'CONNECTED')
+          expect(err).to.not.exist()
+          expect(context).to.exist()
+          expect(context.current_status).to.equal('CONNECTED')
           callback(err)
         })
       }
     },
     function (err, results) {
-      Assert(!err)
+      expect(err).to.not.exist()
       done()
     })
   })
