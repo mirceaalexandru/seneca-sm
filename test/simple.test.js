@@ -65,7 +65,7 @@ suite('state-machine suite tests ', function () {
       verify_configured: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
           expect(err).to.not.exist()
-          expect(context)
+          expect(context).to.exist()
           expect(context.current_status).to.equal('CONNECTED')
           callback(err)
         })
