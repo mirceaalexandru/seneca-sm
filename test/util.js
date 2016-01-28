@@ -147,14 +147,14 @@ exports.init = function (options, cb) {
     if (args.shouldFail) {
       return done('Some error')
     }
-    done(null, {data: 'OK', before_not_configured: true})
+    done(null, {data: 'OK', before_notconfigured: true})
   })
 
   si.add({role: 'transport', execute: 'after_notconfigured_state_change'}, function (args, done) {
     if (args.shouldFail) {
       return done('Some error')
     }
-    done(null, {data: 'OK', after_not_configured: true})
+    done(null, {data: 'OK', after_notconfigured: true})
   })
   cb(null, si)
 }
