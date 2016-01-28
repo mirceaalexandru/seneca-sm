@@ -13,7 +13,7 @@ var expect = Code.expect
 
 var Util = require('./util.js')
 
-suite('test before and after events', function () {
+suite('test local and global after state change events', function () {
   var seneca
 
   before({}, function (done) {
@@ -35,20 +35,10 @@ suite('test before and after events', function () {
     })
   }
 
-  test('test global before and after events', function (done) {
-    var beforeEventRaised = false
+  test('test global after state change event', function (done) {
     var afterEventRaised = false
 
-    // actions to be called by the global before and after patterns from config
-    seneca.add({role: 'transport', execute: 'before_state_change'}, function (args, done) {
-      beforeEventRaised = true
-
-      if (args.shouldFail) {
-        return done('Some error')
-      }
-      done(null, {data: 'OK', before: true})
-    })
-
+    // action to be called by the global after state change event pattern from config
     seneca.add({role: 'transport', execute: 'after_state_change'}, function (args, done) {
       afterEventRaised = true
 
@@ -67,18 +57,17 @@ suite('test before and after events', function () {
         })
       },
       init: function (callback) { verifyState('INIT', Util.config.name, callback) },
-      before_and_after: function (callback) {
-        // go to the NOT_CONFIGURED state, this should fire the before and after events
-        seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
-          expect(beforeEventRaised).to.be.true()
+      after_event_trigger: function (callback) {
+        // go to the CONNECTED state, this fires the global after state change event pattern
+        var loadState = 'CONNECTED'
+        seneca.act('role: ' + Util.config.name + ', load: state', {sm_name: Util.config.name, state: loadState}, function (err, context) {
+          expect(context).to.exist()
+          expect(context.current_status).to.equal(loadState)
 
-          expect(err).to.not.exist()
-          expect(data).to.exist()
-          expect(data.connect).to.exist()
           callback(err)
         })
       },
-      notconfigured: function (callback) { verifyState('NOT_CONFIGURED', Util.config.name, callback) },
+      notconfigured: function (callback) { verifyState('CONNECTED', Util.config.name, callback) },
       verify_after_event: function (callback) {
         expect(afterEventRaised).to.be.true()
 
@@ -91,20 +80,10 @@ suite('test before and after events', function () {
     })
   })
 
-  test('test local before and after events', function (done) {
-    var localBeforeEventRaised = false
+  test('test local after state change event', function (done) {
     var localAfterEventRaised = false
 
-    // actions to be called by the global before and after patterns from config
-    seneca.add({role: 'transport', execute: 'before_notconfigured_state_change'}, function (args, done) {
-      localBeforeEventRaised = true
-
-      if (args.shouldFail) {
-        return done('Some error')
-      }
-      done(null, {data: 'OK', before_notconfigured: true})
-    })
-
+    // actions to be called by the global after state change event patterns from config
     seneca.add({role: 'transport', execute: 'after_notconfigured_state_change'}, function (args, done) {
       localAfterEventRaised = true
 
@@ -125,11 +104,9 @@ suite('test before and after events', function () {
         })
       },
       init: function (callback) { verifyState('INIT', sm2Config.name, callback) },
-      before_and_after: function (callback) {
-        // go to the NOT_CONFIGURED state, this should fire the before and after events
+      after_event_trigger: function (callback) {
+        // go to the NOT_CONFIGURED state, this fires the after state change event
         seneca.act("role: '" + sm2Config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
-          expect(localBeforeEventRaised).to.be.true()
-
           expect(err).to.not.exist()
           expect(data).to.exist()
           expect(data.connect).to.exist()

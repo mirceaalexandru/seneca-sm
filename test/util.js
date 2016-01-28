@@ -12,9 +12,6 @@ exports.config = {
 
   states: {
     events: {
-      before: {
-        pattern: "role: 'transport', execute: 'before_state_change'"
-      },
       after: {
         pattern: "role: 'transport', execute: 'after_state_change'"
       }
@@ -58,9 +55,6 @@ exports.config = {
         }
       },
       events: {
-        before: {
-          pattern: "role: 'transport', execute: 'before_notconfigured_state_change'"
-        },
         after: {
           pattern: "role: 'transport', execute: 'after_notconfigured_state_change'"
         }
@@ -129,25 +123,11 @@ exports.init = function (options, cb) {
     done(null, {data: 'OK', command: true})
   })
 
-  si.add({role: 'transport', execute: 'before_state_change'}, function (args, done) {
-    if (args.shouldFail) {
-      return done('Some error')
-    }
-    done(null, {data: 'OK', before: true})
-  })
-
   si.add({role: 'transport', execute: 'after_state_change'}, function (args, done) {
     if (args.shouldFail) {
       return done('Some error')
     }
     done(null, {data: 'OK', after: true})
-  })
-
-  si.add({role: 'transport', execute: 'before_notconfigured_state_change'}, function (args, done) {
-    if (args.shouldFail) {
-      return done('Some error')
-    }
-    done(null, {data: 'OK', before_notconfigured: true})
   })
 
   si.add({role: 'transport', execute: 'after_notconfigured_state_change'}, function (args, done) {
