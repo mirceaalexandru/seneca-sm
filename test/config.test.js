@@ -80,14 +80,14 @@ suite('state-machine suite tests', function () {
       verify_defaults: function (callback) {
         seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
           expect(err).to.not.exist()
-          expect(context.rules.config.states.INIT).to.exist()
-          expect(context.rules.config.states.INIT.commands).to.exist()
-          expect(context.rules.config.states.INIT.commands.execute).to.exist()
-          expect(context.rules.config.states.INIT.commands.execute.pattern).to.equal(config1.states.INIT.defaults.pattern)
-          expect(context.rules.config.states.INIT.commands.execute.next).to.exist()
-          expect(context.rules.config.states.INIT.commands.execute.next.success).to.exist()
-          expect(context.rules.config.states.INIT.commands.execute.next.error).to.exist()
-          expect(context.rules.config.states.INIT.commands.execute.next.error).to.equal(config1.states.INIT.defaults.next.error)
+          expect(context.config.states.INIT).to.exist()
+          expect(context.config.states.INIT.commands).to.exist()
+          expect(context.config.states.INIT.commands.execute).to.exist()
+          expect(context.config.states.INIT.commands.execute.pattern).to.equal(config1.states.INIT.defaults.pattern)
+          expect(context.config.states.INIT.commands.execute.next).to.exist()
+          expect(context.config.states.INIT.commands.execute.next.success).to.exist()
+          expect(context.config.states.INIT.commands.execute.next.error).to.exist()
+          expect(context.config.states.INIT.commands.execute.next.error).to.equal(config1.states.INIT.defaults.next.error)
 
           callback(err)
         })
