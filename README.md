@@ -27,14 +27,14 @@ npm install seneca-sm
 
 #### Initialisation
 
-```sh
+```js
 seneca.act( "role: 'sm', create: 'instance'", {config: sm_configuration}, function( err, context ) {
 })
 ```
 
 #### Executing commands
 
-```sh
+```js
 seneca.act( "role: 'sm-name', cmd: 'command-name'", some_data, function( err, data ) {
 })
 ```
@@ -47,7 +47,7 @@ where:
 
 #### Retrieving state machine context
 
-```sh
+```js
 seneca.act( "role: 'sm-name', get: 'context'", function( err, context ) {
 })
 ```
@@ -56,8 +56,17 @@ seneca.act( "role: 'sm-name', get: 'context'", function( err, context ) {
 
 This command will set some data in the state machine context. This data will be sent to all commands executed on the state machine.
 
-```sh
+```js
 seneca.act( "role: 'sm-name', set: 'data'", some_data, function( err, context ) {
+})
+```
+
+### Load a specific state-machine context
+
+This command can be called after a sm is initialized to change its internal state from the default state to a specific one
+
+```js
+seneca.act( "role: 'sm-name', load: 'state'", { sm_name: some_sm_name, state: state_to_load}, function( err, context ) {
 })
 ```
 
@@ -65,11 +74,10 @@ seneca.act( "role: 'sm-name', set: 'data'", some_data, function( err, context ) 
 
 This command will close the state machine. This state machine cannot be used anymore. A new state machine with same name can be started.
 
-```sh
+```js
 seneca.act( "role: 'sm-name', drop: 'instance'", function( err, context ) {
 })
 ```
-
 
 ### Configuration
 
@@ -80,6 +88,9 @@ Configuration structure for state machine is:
  * _states_ object defining the states and commands. Key is the state and value an object with
    * _defaults_ default behavior for this state - TBD
    * _initState_ default state for state machine. One single state should have this parameter true
+   * _events_ allows adding event hooks trigered when the state changes
+     * _after_ called after a state changed - can be the child of the root _states_ object or child of a state 
+       * _pattern_ seneca pattern defining the action to be called after the state changed 
    * _commands_ array with all commands for current state
      * _key_ command to be executed for this state
      * _pattern_ seneca pattern defining the action to be called to execute the state
@@ -106,6 +117,11 @@ The configuration to be used for this state machine is:
   validate: true,
   name:     'sm1',
   states: {
+    events: {
+      after: {
+        pattern: "role: 'transport', execute: 'after_any_state_change'"
+      }
+    },
     "INIT": {
       initState: true,
       defaults: {
@@ -143,6 +159,11 @@ The configuration to be used for this state machine is:
             error:   "INIT",
             success: "DISCONNECTED"
           }
+        }
+      },
+      events: {
+        after: {
+          pattern: "role: 'transport', execute: 'after_notconfigured_state_change'"
         }
       }
     },
