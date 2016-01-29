@@ -36,9 +36,18 @@ suite('test local and global after state change events', function () {
   }
 
   test('test global after state change event', function (done) {
+    var beforeEventRaised = false
     var afterEventRaised = false
 
     // action to be called by the global after state change event pattern from config
+    seneca.add({role: 'transport', execute: 'before_state_change'}, function (args, done) {
+      beforeEventRaised = true
+
+      if (args.shouldFail) {
+        return done('Some error')
+      }
+      done(null, {data: 'OK', before: true})
+    })
     seneca.add({role: 'transport', execute: 'after_state_change'}, function (args, done) {
       afterEventRaised = true
 
@@ -57,17 +66,27 @@ suite('test local and global after state change events', function () {
         })
       },
       init: function (callback) { verifyState('INIT', Util.config.name, callback) },
-      after_event_trigger: function (callback) {
+      before_after_event_trigger: function (callback) {
         // go to the CONNECTED state, this fires the global after state change event pattern
         var loadState = 'CONNECTED'
         seneca.act('role: ' + Util.config.name + ', load: state', {sm_name: Util.config.name, state: loadState}, function (err, context) {
+          expect(err).to.not.exist()
           expect(context).to.exist()
           expect(context.current_status).to.equal(loadState)
 
-          callback(err)
+          // execute state and move to DISCONNECTED
+          seneca.act('role: ' + Util.config.name + ', cmd: disconnect', {shouldFail: false}, function (err, data) {
+            expect(beforeEventRaised).to.be.true()
+
+            expect(err).to.not.exist()
+            expect(data).to.exist()
+            expect(data.connect).to.exist()
+
+            callback(err)
+          })
         })
       },
-      notconfigured: function (callback) { verifyState('CONNECTED', Util.config.name, callback) },
+      notconfigured: function (callback) { verifyState('DISCONNECTED', Util.config.name, callback) },
       verify_after_event: function (callback) {
         expect(afterEventRaised).to.be.true()
 
@@ -81,9 +100,18 @@ suite('test local and global after state change events', function () {
   })
 
   test('test local after state change event', function (done) {
+    var localBeforeEventRaised = false
     var localAfterEventRaised = false
 
     // actions to be called by the global after state change event patterns from config
+    seneca.add({role: 'transport', execute: 'before_notconfigured_state_change'}, function (args, done) {
+      localBeforeEventRaised = true
+
+      if (args.shouldFail) {
+        return done('Some error')
+      }
+      done(null, {data: 'OK', before_notconfigured: true})
+    })
     seneca.add({role: 'transport', execute: 'after_notconfigured_state_change'}, function (args, done) {
       localAfterEventRaised = true
 
@@ -104,8 +132,7 @@ suite('test local and global after state change events', function () {
         })
       },
       init: function (callback) { verifyState('INIT', sm2Config.name, callback) },
-      after_event_trigger: function (callback) {
-        // go to the NOT_CONFIGURED state, this fires the after state change event
+      go_not_configured: function (callback) {
         seneca.act("role: '" + sm2Config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
@@ -113,7 +140,18 @@ suite('test local and global after state change events', function () {
           callback(err)
         })
       },
-      notconfigured: function (callback) { verifyState('NOT_CONFIGURED', sm2Config.name, callback) },
+      check_not_configured: function (callback) { verifyState('NOT_CONFIGURED', sm2Config.name, callback) },
+      local_before_after_trigger: function (callback) {
+        // go to the NOT_CONFIGURED state, this fires the after state change event
+        seneca.act("role: '" + sm2Config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+          expect(localBeforeEventRaised).to.be.true()
+
+          expect(err).to.not.exist()
+          expect(data).to.exist()
+          callback(err)
+        })
+      },
+      verify_connected: function (callback) { verifyState('CONNECTED', sm2Config.name, callback) },
       verify_after_event: function (callback) {
         expect(localAfterEventRaised).to.be.true()
 

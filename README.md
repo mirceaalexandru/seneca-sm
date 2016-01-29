@@ -89,8 +89,10 @@ Configuration structure for state machine is:
    * _defaults_ default behavior for this state - TBD
    * _initState_ default state for state machine. One single state should have this parameter true
    * _events_ allows adding event hooks trigered when the state changes
-     * _after_ called after a state changed - can be the child of the root _states_ object or child of a state 
-       * _pattern_ seneca pattern defining the action to be called after the state changed 
+     * _before_ called before the state execution - can be the child of the root _states_ object or child of a state 
+       * _pattern_ seneca pattern defining the action to be called before the state execution
+     * _after_ called after a state is executed - can be the child of the root _states_ object or child of a state
+       * _pattern_ seneca pattern defining the action to be called after the state execution
    * _commands_ array with all commands for current state
      * _key_ command to be executed for this state
      * _pattern_ seneca pattern defining the action to be called to execute the state
@@ -118,6 +120,9 @@ The configuration to be used for this state machine is:
   name:     'sm1',
   states: {
     events: {
+      before: {
+        pattern: "role: 'transport', execute: 'before_any_state_change'"
+      },
       after: {
         pattern: "role: 'transport', execute: 'after_any_state_change'"
       }
@@ -162,6 +167,9 @@ The configuration to be used for this state machine is:
         }
       },
       events: {
+        before: {
+          pattern: "role: 'transport', execute: 'before_notconfigured_state_change'"
+        },
         after: {
           pattern: "role: 'transport', execute: 'after_notconfigured_state_change'"
         }

@@ -5,7 +5,7 @@
   "main": "lib/sm.js",
   "scripts": {
     "start": "lib/sm.js",
-    "test": "lab -v -P test -t 80",
+    "test": "lab -v -P test -t 79",
     "cover": "lab -s -P test -r lcov | coveralls",
     "lint": "lab -P test -dL"
   },
