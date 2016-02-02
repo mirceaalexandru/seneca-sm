@@ -11,6 +11,14 @@ exports.config = {
   name: 'sm1',
 
   states: {
+    events: {
+      before: {
+        pattern: "role: 'transport', execute: 'before_state_change'"
+      },
+      after: {
+        pattern: "role: 'transport', execute: 'after_state_change'"
+      }
+    },
     INIT: {
       initState: true,
       defaults: {
@@ -47,6 +55,14 @@ exports.config = {
           next: {
             success: 'DISCONNECTED'
           }
+        }
+      },
+      events: {
+        before: {
+          pattern: "role: 'transport', execute: 'before_notconfigured_state_change'"
+        },
+        after: {
+          pattern: "role: 'transport', execute: 'after_notconfigured_state_change'"
         }
       }
     },
@@ -92,6 +108,13 @@ exports.init = function (options, cb) {
     done(null, {data: 'OK', connect: true})
   })
 
+  si.add({role: 'transport', execute: 'disconnect'}, function (args, done) {
+    if (args.shouldFail) {
+      return done('Some error')
+    }
+    done(null, {data: 'OK', connect: true})
+  })
+
   si.add({role: 'transport', send: 'config'}, function (args, done) {
     if (args.shouldFail) {
       return done('Some error')
@@ -104,6 +127,34 @@ exports.init = function (options, cb) {
       return done('Some error')
     }
     done(null, {data: 'OK', command: true})
+  })
+
+  si.add({role: 'transport', execute: 'before_state_change'}, function (args, done) {
+    if (args.shouldFail) {
+      return done('Some error')
+    }
+    done(null, {data: 'OK', before: true})
+  })
+
+  si.add({role: 'transport', execute: 'after_state_change'}, function (args, done) {
+    if (args.shouldFail) {
+      return done('Some error')
+    }
+    done(null, {data: 'OK', after: true})
+  })
+
+  si.add({role: 'transport', execute: 'before_notconfigured_state_change'}, function (args, done) {
+    if (args.shouldFail) {
+      return done('Some error')
+    }
+    done(null, {data: 'OK', before_notconfigured: true})
+  })
+
+  si.add({role: 'transport', execute: 'after_notconfigured_state_change'}, function (args, done) {
+    if (args.shouldFail) {
+      return done('Some error')
+    }
+    done(null, {data: 'OK', after_notconfigured: true})
   })
 
   cb(null, si)
