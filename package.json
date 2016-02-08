@@ -23,6 +23,9 @@
     "name": "Mircea Alexandru",
     "email": "mircea.alexandru@gmail.com"
   },
+  "contributors": [
+    "Mihai Dima <mihaizn@gmail.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "async": "1.x.x",
