@@ -25,7 +25,7 @@ suite('test local and global after state change events', function () {
     })
   })
 
-  function verifyState(state, smName, callback) {
+  function verifyState (state, smName, callback) {
     seneca.act('role:sm, get:context, sm_name:' + smName, function (err, context) {
       expect(err).to.not.exist()
       expect(context).to.exist()

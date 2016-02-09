@@ -24,7 +24,7 @@ suite('load state into state-machine tests', function () {
     })
   })
 
-  function verifyState(state, callback) {
+  function verifyState (state, callback) {
     seneca.act("role:'sm', get:context, sm_name:" + Util.config.name, function (err, context) {
       expect(err).to.not.exist()
       expect(context).to.exist()
@@ -46,7 +46,7 @@ suite('load state into state-machine tests', function () {
       init: function (callback) { verifyState('INIT', callback) },
       load_state: function (callback) {
         var loadState = 'CONNECTED'
-        seneca.act('role:sm, load: state', { sm_name: Util.config.name, state: loadState}, function(err, context) {
+        seneca.act('role:sm, load: state', { sm_name: Util.config.name, state: loadState }, function (err, context) {
           expect(context).to.exist()
           expect(context.current_status).to.equal(loadState)
 
