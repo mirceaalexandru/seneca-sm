@@ -28,7 +28,7 @@ npm install seneca-sm
 #### Initialisation
 
 ```js
-seneca.act( 'role: sm, create: instance', {config: sm_configuration}, function( err, context ) {
+seneca.act( 'role: sm, create: instance', config, function( err, context ) {
 })
 ```
 
