@@ -25,8 +25,8 @@ suite('test local and global after state change events', function () {
     })
   })
 
-  function verifyState(state, smName, callback) {
-    seneca.act('role:' + smName + ', get:context', function (err, context) {
+  function verifyState (state, smName, callback) {
+    seneca.act('role:sm, get:context, sm_name:' + smName, function (err, context) {
       expect(err).to.not.exist()
       expect(context).to.exist()
       expect(context.current_status).to.equal(state)
@@ -69,13 +69,13 @@ suite('test local and global after state change events', function () {
       before_after_event_trigger: function (callback) {
         // go to the CONNECTED state, this fires the global after state change event pattern
         var loadState = 'CONNECTED'
-        seneca.act('role: ' + Util.config.name + ', load: state', {sm_name: Util.config.name, state: loadState}, function (err, context) {
+        seneca.act('role: sm, load: state', {sm_name: Util.config.name, state: loadState}, function (err, context) {
           expect(err).to.not.exist()
           expect(context).to.exist()
           expect(context.current_status).to.equal(loadState)
 
           // execute state and move to DISCONNECTED
-          seneca.act('role: ' + Util.config.name + ', cmd: disconnect', {shouldFail: false}, function (err, data) {
+          seneca.act('role: sm, cmd: disconnect', {shouldFail: false, sm_name: Util.config.name}, function (err, data) {
             expect(beforeEventRaised).to.be.true()
 
             expect(err).to.not.exist()
@@ -133,7 +133,7 @@ suite('test local and global after state change events', function () {
       },
       init: function (callback) { verifyState('INIT', sm2Config.name, callback) },
       go_not_configured: function (callback) {
-        seneca.act("role: '" + sm2Config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+        seneca.act("role: 'sm', cmd: 'execute'", {shouldFail: false, sm_name: sm2Config.name}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
           expect(data.connect).to.exist()
@@ -143,7 +143,7 @@ suite('test local and global after state change events', function () {
       check_not_configured: function (callback) { verifyState('NOT_CONFIGURED', sm2Config.name, callback) },
       local_before_after_trigger: function (callback) {
         // go to the NOT_CONFIGURED state, this fires the after state change event
-        seneca.act("role: '" + sm2Config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+        seneca.act("role: 'sm', cmd: 'execute'", {shouldFail: false, sm_name: sm2Config.name}, function (err, data) {
           expect(localBeforeEventRaised).to.be.true()
 
           expect(err).to.not.exist()
