@@ -25,7 +25,7 @@ suite('load state into state-machine tests', function () {
   })
 
   function verifyState(state, callback) {
-    seneca.act('role:' + Util.config.name + ', get:context', function (err, context) {
+    seneca.act("role:'sm', get:context, sm_name:" + Util.config.name, function (err, context) {
       expect(err).to.not.exist()
       expect(context).to.exist()
       expect(context.current_status).to.equal(state)
@@ -46,7 +46,7 @@ suite('load state into state-machine tests', function () {
       init: function (callback) { verifyState('INIT', callback) },
       load_state: function (callback) {
         var loadState = 'CONNECTED'
-        seneca.act('role:' + Util.config.name + ', load: state', { sm_name: Util.config.name, state: loadState}, function(err, context) {
+        seneca.act('role:sm, load: state', { sm_name: Util.config.name, state: loadState}, function(err, context) {
           expect(context).to.exist()
           expect(context.current_status).to.equal(loadState)
 
@@ -55,7 +55,7 @@ suite('load state into state-machine tests', function () {
       },
       load_disconnect: function (callback) {
         // move from CONNECTED to DISCONNECTED
-        seneca.act('role:' + Util.config.name + ', cmd: disconnect', {shouldFail: false}, function (err, data) {
+        seneca.act('role:sm, cmd: disconnect', {sm_name: Util.config.name, shouldFail: false}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
 

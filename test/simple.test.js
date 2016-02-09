@@ -35,7 +35,7 @@ suite('state-machine suite tests ', function () {
 
       // GO TO NOT_CONFIGURED
       go_to_connected: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+        seneca.act("role: 'sm', cmd: 'execute'", {shouldFail: false, sm_name: Util.config.name}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
           expect(data.connect).to.exist()
@@ -43,7 +43,7 @@ suite('state-machine suite tests ', function () {
         })
       },
       verify_connected: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
+        seneca.act("role: 'sm', get: 'context', sm_name: " + Util.config.name, function (err, context) {
           expect(err).to.not.exist()
           expect(context).to.exist()
           expect(context.current_status).to.equal('NOT_CONFIGURED')
@@ -53,7 +53,7 @@ suite('state-machine suite tests ', function () {
 
       // GO TO CONNECTED
       go_to_configured: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+        seneca.act("role: 'sm', cmd: 'execute'", {shouldFail: false, sm_name: Util.config.name}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
           console.log('######################', data)
@@ -63,7 +63,7 @@ suite('state-machine suite tests ', function () {
         })
       },
       verify_configured: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
+        seneca.act("role: 'sm', get: 'context', sm_name: " + Util.config.name, function (err, context) {
           expect(err).to.not.exist()
           expect(context).to.exist()
           expect(context.current_status).to.equal('CONNECTED')
@@ -73,7 +73,7 @@ suite('state-machine suite tests ', function () {
 
       // STAY CONFIGURED
       stay_configured: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', cmd: 'execute'", {shouldFail: false}, function (err, data) {
+        seneca.act("role: 'sm', cmd: 'execute'", {shouldFail: false, sm_name: Util.config.name}, function (err, data) {
           expect(err).to.not.exist()
           expect(data).to.exist()
           expect(data.connect).to.not.exist()
@@ -81,7 +81,7 @@ suite('state-machine suite tests ', function () {
         })
       },
       verify_configured_again: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
+        seneca.act("role: 'sm', get: 'context', sm_name:" + Util.config.name, function (err, context) {
           expect(err).to.not.exist()
           expect(context).to.exist()
           expect(context.current_status).to.equal('CONNECTED')

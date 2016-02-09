@@ -28,14 +28,14 @@ npm install seneca-sm
 #### Initialisation
 
 ```js
-seneca.act( "role: 'sm', create: 'instance'", {config: sm_configuration}, function( err, context ) {
+seneca.act( 'role: sm, create: instance', {config: sm_configuration}, function( err, context ) {
 })
 ```
 
 #### Executing commands
 
 ```js
-seneca.act( "role: 'sm-name', cmd: 'command-name'", some_data, function( err, data ) {
+seneca.act( 'role: sm, cmd: command-name', {sm_name: sm_name, ....}, function( err, data ) {
 })
 ```
 
@@ -48,7 +48,7 @@ where:
 #### Retrieving state machine context
 
 ```js
-seneca.act( "role: 'sm-name', get: 'context'", function( err, context ) {
+seneca.act( 'role: sm, get: context', {sm_name: sm_name} function( err, context ) {
 })
 ```
 
@@ -57,7 +57,7 @@ seneca.act( "role: 'sm-name', get: 'context'", function( err, context ) {
 This command will set some data in the state machine context. This data will be sent to all commands executed on the state machine.
 
 ```js
-seneca.act( "role: 'sm-name', set: 'data'", some_data, function( err, context ) {
+seneca.act( 'role: sm, set: data', {sm_name: sm_name, ....}, function( err, context ) {
 })
 ```
 
@@ -66,7 +66,7 @@ seneca.act( "role: 'sm-name', set: 'data'", some_data, function( err, context ) 
 This command can be called after a sm is initialized to change its internal state from the default state to a specific one
 
 ```js
-seneca.act( "role: 'sm-name', load: 'state'", { sm_name: some_sm_name, state: state_to_load}, function( err, context ) {
+seneca.act( 'role: sm, load: state', { sm_name: sm_name, state: state_to_load}, function( err, context ) {
 })
 ```
 
@@ -75,7 +75,7 @@ seneca.act( "role: 'sm-name', load: 'state'", { sm_name: some_sm_name, state: st
 This command will close the state machine. This state machine cannot be used anymore. A new state machine with same name can be started.
 
 ```js
-seneca.act( "role: 'sm-name', drop: 'instance'", function( err, context ) {
+seneca.act( 'role: sm, drop: instance', {sm_name: sm_name}, function( err, context ) {
 })
 ```
 

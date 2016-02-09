@@ -78,7 +78,7 @@ suite('state-machine suite tests', function () {
       },
 
       verify_defaults: function (callback) {
-        seneca.act("role: '" + Util.config.name + "', get: 'context'", function (err, context) {
+        seneca.act('role: sm, get: context, sm_name: ' + Util.config.name, function (err, context) {
           expect(err).to.not.exist()
           expect(context.config.states.INIT).to.exist()
           expect(context.config.states.INIT.commands).to.exist()
