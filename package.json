@@ -1,6 +1,6 @@
 {
   "name": "seneca-sm",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "A state machine implementation plugin for Seneca",
   "main": "lib/sm.js",
   "scripts": {
